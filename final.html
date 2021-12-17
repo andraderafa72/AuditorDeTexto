@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Document</title>
+
+  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<style>
+  * {
+    padding: 0;
+    margin: 0;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+
+  .auditor-de-texto-container {
+    font-family: 'Inter', 'Roboto', 'Poppins', sans-serif;
+    padding: 2rem;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    gap: 3rem;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+  }
+
+  .auditor-de-texto-container header,
+  .auditor-de-texto-container main,
+  .auditor-de-texto-container footer {
+    margin: 0 auto;
+    max-width: 1120px;
+    width: 100%;
+  }
+
+  .auditor-de-texto-container header {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    gap: 3rem;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+  }
+
+  .auditor-de-texto-container header h1 {
+    font-size: 3.5rem;
+    max-width: 800px;
+    text-align: center;
+  }
+
+  .auditor-de-texto-container main {
+    width: 100%;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+  }
+
+  .editor-de-texto {
+    width: 100%;
+    height: 400px;
+  }
+
+  .info-do-texto {
+    width: 100%;
+    text-align: center;
+    margin-top: 2rem;
+  }
+
+  .info-do-texto span {
+    font-weight: bold;
+    color: #02C722;
+  }
+
+  .info-do-texto p {
+    font-weight: 500;
+  }
+
+  .palavra-em-foco-container {
+    width: 80%;
+  }
+
+  .palavra-em-foco-container .input-wrapper {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+  }
+
+  .palavra-em-foco-container .input-wrapper input {
+    width: calc(70% - .5rem);
+    font-size: 1rem;
+    padding: .75rem 1rem;
+    border: 1px solid #454545;
+    -webkit-transition: .2s;
+    transition: .2s;
+  }
+
+  .palavra-em-foco-container .input-wrapper input:focus {
+    outline: none;
+    border-color: #5B1AB2;
+  }
+
+  .palavra-em-foco-container .input-wrapper button {
+    width: calc(30% - .5rem);
+    cursor: pointer;
+    background: #5B1AB2;
+    text-transform: uppercase;
+    color: #fff;
+    border: none;
+    -webkit-transition: .2s;
+    transition: .2s;
+  }
+
+  .palavra-em-foco-container .input-wrapper button:hover {
+    -webkit-filter: brightness(0.9);
+    filter: brightness(0.9);
+  }
+
+  .resultado {
+    margin: 5rem 0;
+    width: 80%;
+    margin: 5rem auto;
+  }
+
+  .resultado .barra-de-resultado {
+    width: 100%;
+    height: 1rem;
+    background: #d1d1d1;
+    border-radius: 1rem;
+    position: relative;
+  }
+
+  .resultado .barra-de-resultado .pontuacao {
+    width: 6%;
+    height: 100%;
+    border-radius: 1rem;
+    position: relative;
+    -webkit-transition: .4s;
+    transition: .4s;
+    background: #02C722;
+  }
+
+  .resultado .barra-de-resultado .pontuacao.red {
+    background: red;
+  }
+
+  .resultado .barra-de-resultado .pontuacao.orange {
+    background: orange;
+  }
+
+  .resultado .barra-de-resultado .pontuacao.green {
+    background: #02C722;
+  }
+
+  .resultado .barra-de-resultado .pontuacao .circle {
+    position: absolute;
+    right: 0;
+    top: 0;
+    border-radius: 100%;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    width: 5.5rem;
+    height: 5.5rem;
+    background: #d1d1d1;
+    -webkit-transition: .4s;
+    transition: .4s;
+    -webkit-transform: translate3d(10%, -37.5%, 0);
+    transform: translate3d(10%, -37.5%, 0);
+    color: #fff;
+  }
+
+  .resultado .barra-de-resultado .pontuacao .circle.red {
+    background: red;
+  }
+
+  .resultado .barra-de-resultado .pontuacao .circle.orange {
+    background: orange;
+  }
+
+  .resultado .barra-de-resultado .pontuacao .circle.green {
+    background: #02C722;
+  }
+
+  .resultado .barra-de-resultado .pontuacao .circle span {
+    font-size: 14px;
+  }
+
+  .resultado .barra-de-resultado .pontuacao .circle strong {
+    font-size: 1.5rem;
+  }
+
+  .metricas h2 {
+    width: 100%;
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .metricas .check-de-metricas {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: distribute;
+    justify-content: space-around;
+  }
+
+  .metricas .check-de-metricas ul {
+    width: 40%;
+    list-style: none;
+  }
+
+  .metricas .check-de-metricas ul li {
+    padding: 1rem 0;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    font-weight: bold;
+    color: #333;
+  }
+
+  .metricas .check-de-metricas ul li .check {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    border-radius: 100%;
+    width: 2.5rem;
+    height: 2.5rem;
+    background: #d1d1d1;
+  }
+
+  .metricas .check-de-metricas ul li .check.red {
+    background: lightcoral;
+  }
+
+  .metricas .check-de-metricas ul li .check.red svg path {
+    fill: red;
+  }
+
+  .metricas .check-de-metricas ul li .check.orange {
+    background: #ffb71b;
+  }
+
+  .metricas .check-de-metricas ul li .check.orange svg path {
+    fill: lightgoldenrodyellow;
+  }
+
+  .metricas .check-de-metricas ul li .check.green {
+    background: lightgreen;
+  }
+
+  .metricas .check-de-metricas ul li .check.green svg path {
+    fill: green;
+  }
+
+  .metricas .check-de-metricas ul li+li {
+    border-top: 2px solid #d1d1d1;
+  }
+</style>
+
+<body>
+  <main>
+    <section class="auditor-de-texto-container">
+      <header>
+        <h1>Analise e audite o texto do seu Site/Blog!</h1>
+
+        <div class="palavra-em-foco-container">
+          <div class="input-wrapper">
+            <input type="text" placeholder="Palavra chave em foco" class="palavra-chave">
+
+            <button type="button" class="analisar-texto" onclick="analisarTexto()">
+              Analisar agora
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <section class="editor-de-texto">
+          <!-- Editor Quill -->
+        </section>
+        <section class="info-do-texto">
+          <p>Quantidade de caracteres: <span class="char-counter">0 </span>
+            | Quantidade de palavras: <span class="word-counter">0 </span>
+            | Porcentagem de palavras em foco: <span class="focus-counter">0%</span></p>
+
+        </section>
+        <section class="resultado">
+          <div class="barra-de-resultado">
+            <div class="pontuacao">
+              <div class="circle">
+                <span>Qualidade</span>
+                <strong>0</strong>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer>
+        <section class="metricas">
+          <h2>Métricas</h2>
+
+          <div class="check-de-metricas">
+            <ul>
+              <li>
+                H1 Presente
+                <div class="check h1">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M20.8389 6.69459L8.81811 18.7154L3.16125 13.0586L4.57125 11.6486L8.81811 15.8854L19.4289 5.28459L20.8389 6.69459Z"
+                      fill="#999" />
+                  </svg>
+                </div>
+              </li>
+              <li>
+                H2 Presente
+                <div class="check h2">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M20.8389 6.69459L8.81811 18.7154L3.16125 13.0586L4.57125 11.6486L8.81811 15.8854L19.4289 5.28459L20.8389 6.69459Z"
+                      fill="#999" />
+                  </svg>
+                </div>
+              </li>
+              <li>
+                H3 Presente
+                <div class="check h3">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M20.8389 6.69459L8.81811 18.7154L3.16125 13.0586L4.57125 11.6486L8.81811 15.8854L19.4289 5.28459L20.8389 6.69459Z"
+                      fill="#999" />
+                  </svg>
+                </div>
+              </li>
+              <li>
+                H4 Presente
+                <div class="check h4">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M20.8389 6.69459L8.81811 18.7154L3.16125 13.0586L4.57125 11.6486L8.81811 15.8854L19.4289 5.28459L20.8389 6.69459Z"
+                      fill="#999" />
+                  </svg>
+                </div>
+              </li>
+              <li>
+                H5 Presente
+                <div class="check h5">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M20.8389 6.69459L8.81811 18.7154L3.16125 13.0586L4.57125 11.6486L8.81811 15.8854L19.4289 5.28459L20.8389 6.69459Z"
+                      fill="#999" />
+                  </svg>
+                </div>
+              </li>
+              <li>
+                H6 Presente
+                <div class="check h6">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M20.8389 6.69459L8.81811 18.7154L3.16125 13.0586L4.57125 11.6486L8.81811 15.8854L19.4289 5.28459L20.8389 6.69459Z"
+                      fill="#999" />
+                  </svg>
+                </div>
+              </li>
+              <li>
+                Negrito na palavra chave
+                <div class="check negrito">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M20.8389 6.69459L8.81811 18.7154L3.16125 13.0586L4.57125 11.6486L8.81811 15.8854L19.4289 5.28459L20.8389 6.69459Z"
+                      fill="#999" />
+                  </svg>
+                </div>
+              </li>
+            </ul>
+
+            <ul>
+              <li>
+                Itálico na palavra chave
+                <div class="check italico">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M20.8389 6.69459L8.81811 18.7154L3.16125 13.0586L4.57125 11.6486L8.81811 15.8854L19.4289 5.28459L20.8389 6.69459Z"
+                      fill="#999" />
+                  </svg>
+                </div>
+              </li>
+              <li>
+                Atributos de imagem
+                <div class="check imagem">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M20.8389 6.69459L8.81811 18.7154L3.16125 13.0586L4.57125 11.6486L8.81811 15.8854L19.4289 5.28459L20.8389 6.69459Z"
+                      fill="#999" />
+                  </svg>
+                </div>
+              </li>
+              <li>
+                Lista ordenada
+                <div class="check ol">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M20.8389 6.69459L8.81811 18.7154L3.16125 13.0586L4.57125 11.6486L8.81811 15.8854L19.4289 5.28459L20.8389 6.69459Z"
+                      fill="#999" />
+                  </svg>
+                </div>
+              </li>
+              <li>
+                Lista não ordenada
+                <div class="check ul">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M20.8389 6.69459L8.81811 18.7154L3.16125 13.0586L4.57125 11.6486L8.81811 15.8854L19.4289 5.28459L20.8389 6.69459Z"
+                      fill="#999" />
+                  </svg>
+                </div>
+              </li>
+              <li>
+                Link
+                <div class="check link">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M20.8389 6.69459L8.81811 18.7154L3.16125 13.0586L4.57125 11.6486L8.81811 15.8854L19.4289 5.28459L20.8389 6.69459Z"
+                      fill="#999" />
+                  </svg>
+                </div>
+              </li>
+              <li>
+                Mais de 1000 palavras
+                <div class="check palavras">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M20.8389 6.69459L8.81811 18.7154L3.16125 13.0586L4.57125 11.6486L8.81811 15.8854L19.4289 5.28459L20.8389 6.69459Z"
+                      fill="#999" />
+                  </svg>
+                </div>
+              </li>
+              <li>
+                Palavra chave em foco
+                <div class="check foco">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M20.8389 6.69459L8.81811 18.7154L3.16125 13.0586L4.57125 11.6486L8.81811 15.8854L19.4289 5.28459L20.8389 6.69459Z"
+                      fill="#999" />
+                  </svg>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </section>
+      </footer>
+    </section>
+  </main>
+
+  <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+  <script>
+    // CONFIGURAÇÕES DO EDITOR DE TEXTO
+    const quill = new Quill(".editor-de-texto", {
+      theme: "snow",
+      modules: {
+        toolbar: [
+          [{ header: [1, 2, 3, 4, 5, 6, false] }],
+          ["bold", "italic", "underline", "strike"], // toggled buttons
+          ["blockquote", "code-block"],
+          [{ header: 1 }, { header: 2 }], // custom button values
+          [{ list: "ordered" }, { list: "bullet" }],
+          [{ script: "sub" }, { script: "super" }], // superscript/subscript
+          [{ indent: "-1" }, { indent: "+1" }], // outdent/indent
+          [{ direction: "rtl" }], // text direction
+          [{ align: [] }],
+        ],
+      },
+    });
+
+    quill.on("text-change", function (delta, oldDelta, source) {
+      const text = quill.getText();
+      if (text === "") {
+        updateCharCounting(0);
+        updateWordCouting(0);
+      } else {
+        const numeroDePalavras = text.split(" ").length
+        updateCharCounting(text.length - 1);
+        updateWordCouting(numeroDePalavras);
+        updatePercentageCouting(text, numeroDePalavras)
+      }
+    });
+
+    // RENDERIZÇÕES EM TELA
+    function updateCharCounting(numberOfChars) {
+      const wordsCounter = document.querySelector(".char-counter");
+      wordsCounter.innerHTML = numberOfChars + " ";
+    }
+    function updateWordCouting(numberOfWords) {
+      const wordsCounter = document.querySelector(".word-counter");
+      wordsCounter.innerHTML = numberOfWords + " ";
+    }
+    function updatePercentageCouting(texto, numberOfWords) {
+      const focusCounter = document.querySelector(".focus-counter");
+      const numeroDeOcorrencias = texto.split(' ').filter(palavra => palavra.toLowerCase() === palavraChave.toLowerCase()).length;
+
+      const porcentagemDeOcorrencias = (numeroDeOcorrencias * 100) / numberOfWords
+      console.log(porcentagemDeOcorrencias, '%');
+      focusCounter.innerHTML = porcentagemDeOcorrencias + "%";
+    }
+
+    function atualizarBarraDePontuacao(pontos) {
+      const barPontuacao = document.querySelector(".pontuacao");
+      const circlePontuacao = document.querySelector(".pontuacao .circle");
+      const numeroPontuacao = document.querySelector(".pontuacao .circle strong");
+
+      numeroPontuacao.innerHTML = pontos
+
+      if (pontos >= 0 && pontos <= 30) {
+        barPontuacao.classList.add('red');
+        circlePontuacao.classList.add('red');
+      } else if (pontos > 30 && pontos < 90) {
+        barPontuacao.classList.add('orange');
+        circlePontuacao.classList.add('orange');
+      } else {
+        barPontuacao.classList.add('green');
+        circlePontuacao.classList.add('green');
+      }
+
+      barPontuacao.style.width = `${pontos}%`
+    }
+
+    function atualizarChecks(checks) {
+      const elementos = document.querySelectorAll(".check");
+
+      elementos.forEach(el => {
+        if (el.classList.contains('h5') || el.classList.contains('h6')) {
+          el.classList.add('orange')
+        } else {
+          el.classList.add('red')
+        }
+      })
+
+      const allChecks = [];
+      checks.forEach(el => {
+        const query = `.check.${el}`;
+        const check = document.querySelector(query)
+
+        allChecks.push(check)
+      });
+
+      console.log(allChecks, 'checks');
+
+      allChecks.forEach(el => {
+        el.classList.remove('red');
+        el.classList.remove('orange');
+        el.classList.add('green');
+      })
+
+    }
+
+    function renderizarResultado(pontos, checks) {
+      atualizarBarraDePontuacao(pontos)
+      atualizarChecks(checks)
+    }
+
+    // ACIONAMENTO DO BOTÃO
+    function analisarTexto() {
+      const editor = document.querySelector(".ql-editor");
+      const numeroDePalavras = quill.getText().split(" ").length;
+      const palavraChave = document.querySelector(".palavra-chave").value;
+      console.log(editor);
+      const texto = editor.innerHTML;
+
+      if (!texto) return alert("Digite algum texto para ser analisado.");
+      if (!palavraChave) return alert("Digite uma palavra chave");
+
+      const { pontos, checks } = checarConteudo(texto, numeroDePalavras, palavraChave);
+
+      renderizarResultado(pontos, checks)
+    }
+
+    function checarConteudo(texto, numeroDePalavras, palavraChave) {
+      let pontos = 0;
+      const checks = []
+
+      Object.keys(valoresDePontuacao).forEach((key) => {
+        console.log(key, pontos);
+
+        if (key === 'Atributos de imagem' && texto.includes("<img")) {
+          pontos += valoresDePontuacao[key];
+          checks.push('imagem')
+          return;
+        }
+
+        // Negrito
+        if (
+          key === "Negrito na palavra chave" &&
+          (
+            texto.includes("<strong>" + palavraChave + "</strong>") ||
+            texto.includes("<strong><em>" + palavraChave + "</em></strong>") ||
+            texto.includes("<strong>" + palavraChave.toLowerCase() + "</strong>") ||
+            texto.includes("<strong><em>" + palavraChave.toLowerCase() + "</em></strong>") ||
+            texto.includes("<strong>" + palavraChave.toUpperCase() + "</strong>") ||
+            texto.includes("<strong><em>" + palavraChave.toUpperCase() + "</em></strong>")
+          )
+        ) {
+          pontos += valoresDePontuacao[key];
+          checks.push('negrito')
+          return;
+        }
+
+        // Itálico
+        if (
+          key === "Itálico na palavra chave" &&
+          (
+            texto.includes("<em>" + palavraChave + "</em>") ||
+            texto.includes("<em><strong>" + palavraChave + "</strong></em>") ||
+            texto.includes("<em>" + palavraChave.toLowerCase() + "</em>") ||
+            texto.includes("<em><strong>" + palavraChave.toLowerCase() + "</strong></em>") ||
+            texto.includes("<em>" + palavraChave.toUpperCase() + "</em>") ||
+            texto.includes("<em><strong>" + palavraChave.toUpperCase() + "</strong></em>")
+          )
+        ) {
+          pontos += valoresDePontuacao[key];
+          checks.push('italico')
+          return;
+        }
+
+        // 1000 palavras
+        if (key === "Mais de 1000 palavras" && numeroDePalavras >= 1000) {
+          pontos += valoresDePontuacao[key];
+          checks.push('palavras')
+          return;
+        }
+
+        if (key === "Link" && texto.includes('<a href=')) {
+          pontos += valoresDePontuacao[key];
+          checks.push('link')
+          return;
+        }
+
+        // Listas
+        if (key === "Lista não ordenada" && texto.includes('<ul>')) {
+          pontos += valoresDePontuacao[key];
+          checks.push('ul')
+          return;
+        }
+        if (key === "Lista ordenada" && texto.includes('<ol>')) {
+          pontos += valoresDePontuacao[key];
+          checks.push('ol')
+          return;
+        }
+
+        if (key === 'Palavra chave em foco') {
+          const numeroDeOcorrencias = texto.split(' ').filter(palavra => palavra.toLowerCase() === palavraChave.toLowerCase()).length;
+
+          const porcentagemDeOcorrencias = (numeroDeOcorrencias * 100) / numeroDePalavras
+          console.log(porcentagemDeOcorrencias);
+
+          if (porcentagemDeOcorrencias <= 5 && porcentagemDeOcorrencias >= 1) {
+            pontos += valoresDePontuacao[key];
+            checks.push('foco')
+            return;
+          }
+        }
+
+        // Títulos
+        if (texto.includes(key)) {
+          pontos += valoresDePontuacao[key];
+          checks.push(key)
+          return;
+        }
+
+
+      });
+
+      return {
+        pontos,
+        checks,
+      };
+    }
+
+    // VARIÁVEL CONTENDO PONTUAÇÕES
+    const valoresDePontuacao = {
+      'h1': 20,
+      'h2': 15,
+      'h3': 10,
+      'h4': 5,
+      'h5': 0,
+      'h6': 0,
+      "Negrito na palavra chave": 5,
+      "Itálico na palavra chave": 2,
+      "Atributos de imagem": 3,
+      "Lista ordenada": 3,
+      "Lista não ordenada": 2,
+      'Link': 10,
+      "Mais de 1000 palavras": 15,
+      "Palavra chave em foco": 10,
+    };
+
+  </script>
+</body>
+
+</html>
