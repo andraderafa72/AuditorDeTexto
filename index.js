@@ -2,7 +2,7 @@ const inputPalavraChave = document.querySelector(".palavra-chave");
 
 inputPalavraChave.addEventListener("input", (e) => {
   const text = quill.getText();
-  updatePercentageCouting(text, text.split(' ').length);
+  updatePercentageCouting(text, text.split(" ").length);
 });
 
 // CONFIGURAÇÕES DO EDITOR DE TEXTO
@@ -138,9 +138,23 @@ function checarConteudo(texto, numeroDePalavras, palavraChave) {
 
   Object.keys(valoresDePontuacao).forEach((key) => {
     if (key === "Atributos de imagem" && texto.includes("<img")) {
-      pontos += valoresDePontuacao[key];
-      checks.push("imagem");
-      return;
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(texto, "text/html");
+      const imgs = doc.querySelectorAll("img");
+
+      let temPalavraChave = false;
+
+      imgs.forEach((img) => {
+        img.alt.includes(palavraChave)
+          ? (temPalavraChave = true)
+          : null;
+      });
+
+      if (temPalavraChave) {
+        pontos += valoresDePontuacao[key];
+        checks.push("imagem");
+        return;
+      }
     }
 
     // Negrito
@@ -189,21 +203,54 @@ function checarConteudo(texto, numeroDePalavras, palavraChave) {
     }
 
     if (key === "Link" && texto.includes("<a href=")) {
-      pontos += valoresDePontuacao[key];
-      checks.push("link");
-      return;
+        pontos += valoresDePontuacao[key];
+        checks.push("link");
+        return;
     }
 
     // Listas
     if (key === "Lista não ordenada" && texto.includes("<ul>")) {
-      pontos += valoresDePontuacao[key];
-      checks.push("ul");
-      return;
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(texto, "text/html");
+      const lis = doc.querySelectorAll("ul li");
+
+      let temPalavraChave = false;
+
+      lis.forEach((li) => {
+        li.innerHTML.includes(palavraChave) ||
+        li.innerHTML.includes(palavraChave.toLowerCase()) ||
+        li.innerHTML.includes(palavraChave.toUpperCase())
+          ? (temPalavraChave = true)
+          : null;
+      });
+
+      if (temPalavraChave) {
+        pontos += valoresDePontuacao[key];
+        checks.push("ul");
+        return;
+      }
     }
+
     if (key === "Lista ordenada" && texto.includes("<ol>")) {
-      pontos += valoresDePontuacao[key];
-      checks.push("ol");
-      return;
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(texto, "text/html");
+      const lis = doc.querySelectorAll("ol li");
+
+      let temPalavraChave = false;
+
+      lis.forEach((li) => {
+        li.innerHTML.includes(palavraChave) ||
+        li.innerHTML.includes(palavraChave.toLowerCase()) ||
+        li.innerHTML.includes(palavraChave.toUpperCase())
+          ? (temPalavraChave = true)
+          : null;
+      });
+
+      if (temPalavraChave) {
+        pontos += valoresDePontuacao[key];
+        checks.push("ol");
+        return;
+      }
     }
 
     if (key === "Palavra chave em foco") {
@@ -225,9 +272,26 @@ function checarConteudo(texto, numeroDePalavras, palavraChave) {
 
     // Títulos
     if (texto.includes(key)) {
-      pontos += valoresDePontuacao[key];
-      checks.push(key);
-      return;
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(texto, "text/html");
+      const titles = doc.querySelectorAll(key);
+
+      let temPalavraChave = false;
+
+      titles.forEach((el) => {
+        el.innerHTML.includes(palavraChave) ||
+        el.innerHTML.includes(palavraChave.toLowerCase()) ||
+        el.innerHTML.includes(palavraChave.toUpperCase())
+          ? (temPalavraChave = true)
+          : null;
+      });
+
+      console.log(temPalavraChave);
+      if (temPalavraChave) {
+        pontos += valoresDePontuacao[key];
+        checks.push(key);
+        return;
+      }
     }
   });
 
