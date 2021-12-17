@@ -40,11 +40,13 @@ function updateWordCouting(numberOfWords) {
 }
 function updatePercentageCouting(texto, numberOfWords) {
   const focusCounter = document.querySelector(".focus-counter");
-  const numeroDeOcorrencias = texto.split(' ').filter(palavra => palavra.toLowerCase() === palavraChave.toLowerCase()).length;
+  const palavraChave = document.querySelector(".palavra-chave").value;
+
+  const numeroDeOcorrencias = texto.split(' ').filter(palavra => palavra.toLowerCase().includes(palavraChave.toLowerCase())).length;
 
   const porcentagemDeOcorrencias = (numeroDeOcorrencias * 100) / numberOfWords
-  console.log(porcentagemDeOcorrencias, '%');
-  focusCounter.innerHTML = porcentagemDeOcorrencias + "%";
+
+  focusCounter.innerHTML = porcentagemDeOcorrencias.toFixed(2) + "%";
 }
 
 function atualizarBarraDePontuacao(pontos) {
@@ -87,7 +89,6 @@ function atualizarChecks(checks){
     allChecks.push(check)
   });
 
-  console.log(allChecks, 'checks');
 
   allChecks.forEach(el => {
     el.classList.remove('red');
@@ -107,7 +108,7 @@ function analisarTexto() {
   const editor = document.querySelector(".ql-editor");
   const numeroDePalavras = quill.getText().split(" ").length;
   const palavraChave = document.querySelector(".palavra-chave").value;
-  console.log(editor);
+
   const texto = editor.innerHTML;
 
   if (!texto) return alert("Digite algum texto para ser analisado.");
@@ -123,8 +124,6 @@ function checarConteudo(texto, numeroDePalavras, palavraChave) {
   const checks = []
 
   Object.keys(valoresDePontuacao).forEach((key) => {
-    console.log(key, pontos);
-
     if(key === 'Atributos de imagem' && texto.includes("<img")){
       pontos += valoresDePontuacao[key];
       checks.push('imagem')
@@ -191,10 +190,9 @@ function checarConteudo(texto, numeroDePalavras, palavraChave) {
     }
 
     if(key === 'Palavra chave em foco'){
-      const numeroDeOcorrencias = texto.split(' ').filter(palavra => palavra.toLowerCase() === palavraChave.toLowerCase()).length;
+      const numeroDeOcorrencias = texto.split(' ').filter(palavra => palavra.toLowerCase().includes(palavraChave.toLowerCase())).length;
 
       const porcentagemDeOcorrencias = (numeroDeOcorrencias * 100) / numeroDePalavras
-      console.log(porcentagemDeOcorrencias);
 
       if(porcentagemDeOcorrencias <= 5 && porcentagemDeOcorrencias >= 1){
         pontos += valoresDePontuacao[key];

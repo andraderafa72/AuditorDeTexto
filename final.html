@@ -543,10 +543,10 @@
     }
     function updatePercentageCouting(texto, numberOfWords) {
       const focusCounter = document.querySelector(".focus-counter");
+      const palavraChave = document.querySelector(".palavra-chave").value;
       const numeroDeOcorrencias = texto.split(' ').filter(palavra => palavra.toLowerCase() === palavraChave.toLowerCase()).length;
 
       const porcentagemDeOcorrencias = (numeroDeOcorrencias * 100) / numberOfWords
-      console.log(porcentagemDeOcorrencias, '%');
       focusCounter.innerHTML = porcentagemDeOcorrencias + "%";
     }
 
@@ -590,7 +590,6 @@
         allChecks.push(check)
       });
 
-      console.log(allChecks, 'checks');
 
       allChecks.forEach(el => {
         el.classList.remove('red');
@@ -610,7 +609,7 @@
       const editor = document.querySelector(".ql-editor");
       const numeroDePalavras = quill.getText().split(" ").length;
       const palavraChave = document.querySelector(".palavra-chave").value;
-      console.log(editor);
+
       const texto = editor.innerHTML;
 
       if (!texto) return alert("Digite algum texto para ser analisado.");
@@ -626,8 +625,6 @@
       const checks = []
 
       Object.keys(valoresDePontuacao).forEach((key) => {
-        console.log(key, pontos);
-
         if (key === 'Atributos de imagem' && texto.includes("<img")) {
           pontos += valoresDePontuacao[key];
           checks.push('imagem')
@@ -697,7 +694,6 @@
           const numeroDeOcorrencias = texto.split(' ').filter(palavra => palavra.toLowerCase() === palavraChave.toLowerCase()).length;
 
           const porcentagemDeOcorrencias = (numeroDeOcorrencias * 100) / numeroDePalavras
-          console.log(porcentagemDeOcorrencias);
 
           if (porcentagemDeOcorrencias <= 5 && porcentagemDeOcorrencias >= 1) {
             pontos += valoresDePontuacao[key];
@@ -739,7 +735,6 @@
       "Mais de 1000 palavras": 15,
       "Palavra chave em foco": 10,
     };
-
   </script>
 </body>
 
