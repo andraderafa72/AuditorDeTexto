@@ -230,11 +230,23 @@
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
   font-weight: bold;
   color: #333;
+}
+
+.metricas .check-de-metricas ul li .error {
+  margin-top: 1rem;
+  padding-left: .5rem;
+  opacity: .75;
+  width: 100%;
+  color: red;
+  font-size: 14px;
+  display: none;
 }
 
 .metricas .check-de-metricas ul li .check {
@@ -259,6 +271,10 @@
 
 .metricas .check-de-metricas ul li .check.red svg path {
   fill: red;
+}
+
+.metricas .check-de-metricas ul li .check.red + .error {
+  display: block;
 }
 
 .metricas .check-de-metricas ul li .check.orange {

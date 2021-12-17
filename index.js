@@ -85,6 +85,7 @@ function atualizarChecks(checks) {
   const elementos = document.querySelectorAll(".check");
 
   elementos.forEach((el) => {
+    el.classList.remove("green");
     if (el.classList.contains("h5") || el.classList.contains("h6")) {
       el.classList.add("orange");
     } else {
@@ -108,6 +109,7 @@ function atualizarChecks(checks) {
 }
 
 function renderizarResultado(pontos, checks) {
+  console.log(pontos, checks);
   atualizarBarraDePontuacao(pontos);
   atualizarChecks(checks);
 }
@@ -128,6 +130,7 @@ function analisarTexto() {
     numeroDePalavras,
     palavraChave
   );
+  console.log(texto, pontos);
 
   renderizarResultado(pontos, checks);
 }
@@ -145,9 +148,7 @@ function checarConteudo(texto, numeroDePalavras, palavraChave) {
       let temPalavraChave = false;
 
       imgs.forEach((img) => {
-        img.alt.includes(palavraChave)
-          ? (temPalavraChave = true)
-          : null;
+        img.alt.includes(palavraChave) ? (temPalavraChave = true) : null;
       });
 
       if (temPalavraChave) {
@@ -158,41 +159,45 @@ function checarConteudo(texto, numeroDePalavras, palavraChave) {
     }
 
     // Negrito
-    if (
-      key === "Negrito na palavra chave" &&
-      (texto.includes("<strong>" + palavraChave + "</strong>") ||
-        texto.includes("<strong><em>" + palavraChave + "</em></strong>") ||
-        texto.includes("<strong>" + palavraChave.toLowerCase() + "</strong>") ||
-        texto.includes(
-          "<strong><em>" + palavraChave.toLowerCase() + "</em></strong>"
-        ) ||
-        texto.includes("<strong>" + palavraChave.toUpperCase() + "</strong>") ||
-        texto.includes(
-          "<strong><em>" + palavraChave.toUpperCase() + "</em></strong>"
-        ))
-    ) {
-      pontos += valoresDePontuacao[key];
-      checks.push("negrito");
-      return;
+    if (key === "Negrito na palavra chave") {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(texto, "text/html");
+      const strongs = doc.querySelectorAll("strong");
+
+      let temPalavraChave = false;
+
+      strongs.forEach((strong) => {
+        strong.innerHTML.includes(palavraChave)
+          ? (temPalavraChave = true)
+          : null;
+      });
+
+      if (temPalavraChave) {
+        pontos += valoresDePontuacao[key];
+        checks.push("negrito");
+        return;
+      }
     }
 
     // Itálico
-    if (
-      key === "Itálico na palavra chave" &&
-      (texto.includes("<em>" + palavraChave + "</em>") ||
-        texto.includes("<em><strong>" + palavraChave + "</strong></em>") ||
-        texto.includes("<em>" + palavraChave.toLowerCase() + "</em>") ||
-        texto.includes(
-          "<em><strong>" + palavraChave.toLowerCase() + "</strong></em>"
-        ) ||
-        texto.includes("<em>" + palavraChave.toUpperCase() + "</em>") ||
-        texto.includes(
-          "<em><strong>" + palavraChave.toUpperCase() + "</strong></em>"
-        ))
-    ) {
-      pontos += valoresDePontuacao[key];
-      checks.push("italico");
-      return;
+    if (key === "Itálico na palavra chave") {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(texto, "text/html");
+      const ems = doc.querySelectorAll("em");
+
+      let temPalavraChave = false;
+
+      ems.forEach((em) => {
+        em.innerHTML.includes(palavraChave)
+          ? (temPalavraChave = true)
+          : null;
+      });
+
+      if (temPalavraChave) {
+        pontos += valoresDePontuacao[key];
+        checks.push("italico");
+        return;
+      }
     }
 
     // 1000 palavras
@@ -203,9 +208,9 @@ function checarConteudo(texto, numeroDePalavras, palavraChave) {
     }
 
     if (key === "Link" && texto.includes("<a href=")) {
-        pontos += valoresDePontuacao[key];
-        checks.push("link");
-        return;
+      pontos += valoresDePontuacao[key];
+      checks.push("link");
+      return;
     }
 
     // Listas
