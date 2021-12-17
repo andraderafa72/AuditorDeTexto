@@ -22,8 +22,10 @@ quill.on("text-change", function (delta, oldDelta, source) {
     updateCharCounting(0);
     updateWordCouting(0);
   } else {
+    const numeroDePalavras = text.split(" ").length
     updateCharCounting(text.length - 1);
-    updateWordCouting(text.split(" ").length);
+    updateWordCouting(numeroDePalavras);
+    updatePercentageCouting(text, numeroDePalavras)
   }
 });
 
@@ -36,6 +38,14 @@ function updateWordCouting(numberOfWords) {
   const wordsCounter = document.querySelector(".word-counter");
   wordsCounter.innerHTML = numberOfWords + " ";
 }
+function updatePercentageCouting(texto, numberOfWords) {
+  const focusCounter = document.querySelector(".focus-counter");
+  const numeroDeOcorrencias = texto.split(' ').filter(palavra => palavra.toLowerCase() === palavraChave.toLowerCase()).length;
+
+  const porcentagemDeOcorrencias = (numeroDeOcorrencias * 100) / numberOfWords
+  console.log(porcentagemDeOcorrencias, '%');
+  focusCounter.innerHTML = porcentagemDeOcorrencias + "%";
+}
 
 function atualizarBarraDePontuacao(pontos) {
   const barPontuacao = document.querySelector(".pontuacao");
@@ -44,15 +54,15 @@ function atualizarBarraDePontuacao(pontos) {
 
   numeroPontuacao.innerHTML = pontos
 
-  if(pontos >= 0 || pontos < 50){
+  if(pontos >= 0 && pontos <= 30){
     barPontuacao.classList.add('red');
     circlePontuacao.classList.add('red');
-  } else if(pontos >= 50 || pontos < 70){
+  } else if(pontos > 30 && pontos < 90){
     barPontuacao.classList.add('orange');
     circlePontuacao.classList.add('orange');
   } else {
-    barPontuacao.classList.add('grenn');
-    circlePontuacao.classList.add('grenn');
+    barPontuacao.classList.add('green');
+    circlePontuacao.classList.add('green');
   }
 
   barPontuacao.style.width = `${pontos}%`
@@ -124,8 +134,14 @@ function checarConteudo(texto, numeroDePalavras, palavraChave) {
     // Negrito
     if (
       key === "Negrito na palavra chave" &&
-      (texto.includes("<strong>" + palavraChave + "</strong>") ||
-      texto.includes("<strong><em>" + palavraChave + "</em></strong>") )
+      (
+        texto.includes("<strong>" + palavraChave + "</strong>") ||
+        texto.includes("<strong><em>" + palavraChave + "</em></strong>") ||
+        texto.includes("<strong>" + palavraChave.toLowerCase() + "</strong>") ||
+        texto.includes("<strong><em>" + palavraChave.toLowerCase() + "</em></strong>") ||
+        texto.includes("<strong>" + palavraChave.toUpperCase() + "</strong>") ||
+        texto.includes("<strong><em>" + palavraChave.toUpperCase() + "</em></strong>") 
+      )
     ) {
       pontos += valoresDePontuacao[key];
       checks.push('negrito')
@@ -135,8 +151,14 @@ function checarConteudo(texto, numeroDePalavras, palavraChave) {
     // Itálico
     if (
       key === "Itálico na palavra chave" &&
-      (texto.includes("<em>" + palavraChave + "</em>") ||
-      texto.includes("<em><strong>" + palavraChave + "</strong></em>"))
+      (
+        texto.includes("<em>" + palavraChave + "</em>") ||
+        texto.includes("<em><strong>" + palavraChave + "</strong></em>") ||
+        texto.includes("<em>" + palavraChave.toLowerCase() + "</em>") ||
+        texto.includes("<em><strong>" + palavraChave.toLowerCase() + "</strong></em>") ||
+        texto.includes("<em>" + palavraChave.toUpperCase() + "</em>") ||
+        texto.includes("<em><strong>" + palavraChave.toUpperCase() + "</strong></em>") 
+      )
     ) {
       pontos += valoresDePontuacao[key];
       checks.push('italico')
@@ -169,16 +191,16 @@ function checarConteudo(texto, numeroDePalavras, palavraChave) {
     }
 
     if(key === 'Palavra chave em foco'){
-      const numeroDeOcorrencias = texto.split(' ').filter(palavra => palavra === palavraChave).length;
+      const numeroDeOcorrencias = texto.split(' ').filter(palavra => palavra.toLowerCase() === palavraChave.toLowerCase()).length;
 
-      const porcentagemDeOcorrencias = (numeroDeOcorrencias * numeroDePalavras) / 100
+      const porcentagemDeOcorrencias = (numeroDeOcorrencias * 100) / numeroDePalavras
       console.log(porcentagemDeOcorrencias);
 
       if(porcentagemDeOcorrencias <= 5 && porcentagemDeOcorrencias >= 1){
         pontos += valoresDePontuacao[key];
         checks.push('foco')
         return;
-        }
+      }
     }
 
     // Títulos
