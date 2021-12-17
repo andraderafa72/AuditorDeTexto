@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Document</title>
+
+  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <main>
+    <section class="auditor-de-texto-container">
+      <header>
+        <h1>Analise e audite o texto do seu Site/Blog!</h1>
+
+        <div class="palavra-em-foco-container">
+          <div class="input-wrapper">
+            <input type="text" placeholder="Palavra chave em foco" class="palavra-chave">
+
+            <button type="button" class="analisar-texto" onclick="analisarTexto()">
+              Analisar agora
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <section class="editor-de-texto">
+          <!-- Editor Quill -->
+        </section>
+        <section class="info-do-texto">
+          <p>Quantidade de caracteres: <span class="char-counter">0 </span>
+            | Quantidade de palavras: <span class="word-counter">0 </span>
+            | Porcentagem de palavras em foco: <span class="focus-counter">0%</span></p>
+
+        </section>
+        <section class="resultado">
+          <div class="barra-de-resultado">
+            <div class="pontuacao">
+              <div class="circle">
+                <span>Qualidade</span>
+                <strong>0</strong>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer>
+        <section class="metricas">
+          <h2>Métricas</h2>
+
+          <div class="check-de-metricas">
+            <ul>
+              <li>
+                H1 Presente
+                <div class="check h1">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M20.8389 6.69459L8.81811 18.7154L3.16125 13.0586L4.57125 11.6486L8.81811 15.8854L19.4289 5.28459L20.8389 6.69459Z"
+                      fill="#999" />
+                  </svg>
+                </div>
+              </li>
+              <li>
+                H2 Presente
+                <div class="check h2">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M20.8389 6.69459L8.81811 18.7154L3.16125 13.0586L4.57125 11.6486L8.81811 15.8854L19.4289 5.28459L20.8389 6.69459Z"
+                      fill="#999" />
+                  </svg>
+                </div>
+              </li>
+              <li>
+                H3 Presente
+                <div class="check h3">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M20.8389 6.69459L8.81811 18.7154L3.16125 13.0586L4.57125 11.6486L8.81811 15.8854L19.4289 5.28459L20.8389 6.69459Z"
+                      fill="#999" />
+                  </svg>
+                </div>
+              </li>
+              <li>
+                H4 Presente
+                <div class="check h4">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M20.8389 6.69459L8.81811 18.7154L3.16125 13.0586L4.57125 11.6486L8.81811 15.8854L19.4289 5.28459L20.8389 6.69459Z"
+                      fill="#999" />
+                  </svg>
+                </div>
+              </li>
+              <li>
+                H5 Presente
+                <div class="check h5">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M20.8389 6.69459L8.81811 18.7154L3.16125 13.0586L4.57125 11.6486L8.81811 15.8854L19.4289 5.28459L20.8389 6.69459Z"
+                      fill="#999" />
+                  </svg>
+                </div>
+              </li>
+              <li>
+                H6 Presente
+                <div class="check h6">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M20.8389 6.69459L8.81811 18.7154L3.16125 13.0586L4.57125 11.6486L8.81811 15.8854L19.4289 5.28459L20.8389 6.69459Z"
+                      fill="#999" />
+                  </svg>
+                </div>
+              </li>
+              <li>
+                Negrito na palavra chave
+                <div class="check negrito">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M20.8389 6.69459L8.81811 18.7154L3.16125 13.0586L4.57125 11.6486L8.81811 15.8854L19.4289 5.28459L20.8389 6.69459Z"
+                      fill="#999" />
+                  </svg>
+                </div>
+              </li>
+            </ul>
+
+            <ul>
+              <li>
+                Itálico na palavra chave
+                <div class="check italico">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M20.8389 6.69459L8.81811 18.7154L3.16125 13.0586L4.57125 11.6486L8.81811 15.8854L19.4289 5.28459L20.8389 6.69459Z"
+                      fill="#999" />
+                  </svg>
+                </div>
+              </li>
+              <li>
+                Atributos de imagem
+                <div class="check imagem">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M20.8389 6.69459L8.81811 18.7154L3.16125 13.0586L4.57125 11.6486L8.81811 15.8854L19.4289 5.28459L20.8389 6.69459Z"
+                      fill="#999" />
+                  </svg>
+                </div>
+              </li>
+              <li>
+                Lista ordenada
+                <div class="check ol">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M20.8389 6.69459L8.81811 18.7154L3.16125 13.0586L4.57125 11.6486L8.81811 15.8854L19.4289 5.28459L20.8389 6.69459Z"
+                      fill="#999" />
+                  </svg>
+                </div>
+              </li>
+              <li>
+                Lista não ordenada
+                <div class="check ul">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M20.8389 6.69459L8.81811 18.7154L3.16125 13.0586L4.57125 11.6486L8.81811 15.8854L19.4289 5.28459L20.8389 6.69459Z"
+                      fill="#999" />
+                  </svg>
+                </div>
+              </li>
+              <li>
+                Link
+                <div class="check link">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M20.8389 6.69459L8.81811 18.7154L3.16125 13.0586L4.57125 11.6486L8.81811 15.8854L19.4289 5.28459L20.8389 6.69459Z"
+                      fill="#999" />
+                  </svg>
+                </div>
+              </li>
+              <li>
+                Mais de 1000 palavras
+                <div class="check palavras">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M20.8389 6.69459L8.81811 18.7154L3.16125 13.0586L4.57125 11.6486L8.81811 15.8854L19.4289 5.28459L20.8389 6.69459Z"
+                      fill="#999" />
+                  </svg>
+                </div>
+              </li>
+              <li>
+                Palavra chave em foco
+                <div class="check foco">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M20.8389 6.69459L8.81811 18.7154L3.16125 13.0586L4.57125 11.6486L8.81811 15.8854L19.4289 5.28459L20.8389 6.69459Z"
+                      fill="#999" />
+                  </svg>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </section>
+      </footer>
+    </section>
+  </main>
+
+  <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+  <script src="index.js"></script>
+</body>
+
+</html>
