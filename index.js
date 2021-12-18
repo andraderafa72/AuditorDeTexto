@@ -126,9 +126,9 @@ function analisarTexto() {
   if (!palavraChave) return alert("Digite uma palavra chave");
 
   const { pontos, checks } = checarConteudo(
-    texto,
+    texto.toLowerCase(),
     numeroDePalavras,
-    palavraChave
+    palavraChave.toLowerCase()
   );
   console.log(texto, pontos);
 
@@ -222,9 +222,7 @@ function checarConteudo(texto, numeroDePalavras, palavraChave) {
       let temPalavraChave = false;
 
       lis.forEach((li) => {
-        li.innerHTML.includes(palavraChave) ||
-        li.innerHTML.includes(palavraChave.toLowerCase()) ||
-        li.innerHTML.includes(palavraChave.toUpperCase())
+        li.innerHTML.toLowerCase().includes(palavraChave.toLowerCase()) 
           ? (temPalavraChave = true)
           : null;
       });
@@ -244,9 +242,7 @@ function checarConteudo(texto, numeroDePalavras, palavraChave) {
       let temPalavraChave = false;
 
       lis.forEach((li) => {
-        li.innerHTML.includes(palavraChave) ||
-        li.innerHTML.includes(palavraChave.toLowerCase()) ||
-        li.innerHTML.includes(palavraChave.toUpperCase())
+        li.innerHTML.toLowerCase().includes(palavraChave.toLowerCase())
           ? (temPalavraChave = true)
           : null;
       });
@@ -284,9 +280,7 @@ function checarConteudo(texto, numeroDePalavras, palavraChave) {
       let temPalavraChave = false;
 
       titles.forEach((el) => {
-        el.innerHTML.includes(palavraChave) ||
-        el.innerHTML.includes(palavraChave.toLowerCase()) ||
-        el.innerHTML.includes(palavraChave.toUpperCase())
+        el.innerHTML.toLowerCase().includes(palavraChave.toLowerCase())
           ? (temPalavraChave = true)
           : null;
       });
