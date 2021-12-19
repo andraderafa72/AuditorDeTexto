@@ -239,14 +239,22 @@
   color: #333;
 }
 
-.metricas .check-de-metricas ul li .error {
+.metricas .check-de-metricas ul li .error, .metricas .check-de-metricas ul li .warning {
   margin-top: 1rem;
-  padding-left: .5rem;
-  opacity: .75;
+  padding: .5rem 0 .5rem .5rem;
   width: 100%;
-  color: red;
   font-size: 14px;
   display: none;
+  background: #f2f2f2;
+  border-radius: .25rem;
+}
+
+.metricas .check-de-metricas ul li .error {
+  color: red;
+}
+
+.metricas .check-de-metricas ul li .warning {
+  color: orange;
 }
 
 .metricas .check-de-metricas ul li .check {
@@ -283,6 +291,10 @@
 
 .metricas .check-de-metricas ul li .check.orange svg path {
   fill: lightgoldenrodyellow;
+}
+
+.metricas .check-de-metricas ul li .check.orange ~ .warning {
+  display: block;
 }
 
 .metricas .check-de-metricas ul li .check.green {

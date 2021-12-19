@@ -5,6 +5,8 @@ inputPalavraChave.addEventListener("input", (e) => {
   updatePercentageCouting(text, text.split(" ").length);
 });
 
+let numeroDeTitulos = 0;
+
 // CONFIGURAÇÕES DO EDITOR DE TEXTO
 const quill = new Quill(".editor-de-texto", {
   theme: "snow",
@@ -67,6 +69,13 @@ function atualizarBarraDePontuacao(pontos) {
 
   numeroPontuacao.innerHTML = pontos;
 
+  barPontuacao.classList.remove("orange");
+  circlePontuacao.classList.remove("orange");
+  barPontuacao.classList.remove("green");
+  circlePontuacao.classList.remove("green");
+  barPontuacao.classList.remove("red");
+  circlePontuacao.classList.remove("red");
+
   if (pontos >= 0 && pontos <= 30) {
     barPontuacao.classList.add("red");
     circlePontuacao.classList.add("red");
@@ -83,10 +92,13 @@ function atualizarBarraDePontuacao(pontos) {
 
 function atualizarChecks(checks) {
   const elementos = document.querySelectorAll(".check");
+  console.log(numeroDeTitulos);
 
   elementos.forEach((el) => {
     el.classList.remove("green");
     if (el.classList.contains("h5") || el.classList.contains("h6")) {
+      el.classList.add("orange");
+    } else if (el.classList.contains("h1") && numeroDeTitulos > 1) {
       el.classList.add("orange");
     } else {
       el.classList.add("red");
@@ -130,7 +142,6 @@ function analisarTexto() {
     numeroDePalavras,
     palavraChave.toLowerCase()
   );
-  console.log(texto, pontos);
 
   renderizarResultado(pontos, checks);
 }
@@ -159,7 +170,7 @@ function checarConteudo(texto, numeroDePalavras, palavraChave) {
     }
 
     // Negrito
-    if (key === "Negrito na palavra chave") {
+    else if (key === "Negrito na palavra chave") {
       const parser = new DOMParser();
       const doc = parser.parseFromString(texto, "text/html");
       const strongs = doc.querySelectorAll("strong");
@@ -180,7 +191,7 @@ function checarConteudo(texto, numeroDePalavras, palavraChave) {
     }
 
     // Itálico
-    if (key === "Itálico na palavra chave") {
+    else if (key === "Itálico na palavra chave") {
       const parser = new DOMParser();
       const doc = parser.parseFromString(texto, "text/html");
       const ems = doc.querySelectorAll("em");
@@ -188,9 +199,7 @@ function checarConteudo(texto, numeroDePalavras, palavraChave) {
       let temPalavraChave = false;
 
       ems.forEach((em) => {
-        em.innerHTML.includes(palavraChave)
-          ? (temPalavraChave = true)
-          : null;
+        em.innerHTML.includes(palavraChave) ? (temPalavraChave = true) : null;
       });
 
       if (temPalavraChave) {
@@ -201,20 +210,18 @@ function checarConteudo(texto, numeroDePalavras, palavraChave) {
     }
 
     // 1000 palavras
-    if (key === "Mais de 1000 palavras" && numeroDePalavras >= 1000) {
+    else if (key === "Mais de 1000 palavras" && numeroDePalavras >= 1000) {
       pontos += valoresDePontuacao[key];
       checks.push("palavras");
       return;
-    }
-
-    if (key === "Link" && texto.includes("<a href=")) {
+    } else if (key === "Link" && texto.includes("<a href=")) {
       pontos += valoresDePontuacao[key];
       checks.push("link");
       return;
     }
 
     // Listas
-    if (key === "Lista não ordenada" && texto.includes("<ul>")) {
+    else if (key === "Lista não ordenada" && texto.includes("<ul>")) {
       const parser = new DOMParser();
       const doc = parser.parseFromString(texto, "text/html");
       const lis = doc.querySelectorAll("ul li");
@@ -222,7 +229,7 @@ function checarConteudo(texto, numeroDePalavras, palavraChave) {
       let temPalavraChave = false;
 
       lis.forEach((li) => {
-        li.innerHTML.toLowerCase().includes(palavraChave.toLowerCase()) 
+        li.innerHTML.toLowerCase().includes(palavraChave.toLowerCase())
           ? (temPalavraChave = true)
           : null;
       });
@@ -232,9 +239,7 @@ function checarConteudo(texto, numeroDePalavras, palavraChave) {
         checks.push("ul");
         return;
       }
-    }
-
-    if (key === "Lista ordenada" && texto.includes("<ol>")) {
+    } else if (key === "Lista ordenada" && texto.includes("<ol>")) {
       const parser = new DOMParser();
       const doc = parser.parseFromString(texto, "text/html");
       const lis = doc.querySelectorAll("ol li");
@@ -252,9 +257,7 @@ function checarConteudo(texto, numeroDePalavras, palavraChave) {
         checks.push("ol");
         return;
       }
-    }
-
-    if (key === "Palavra chave em foco") {
+    } else if (key === "Palavra chave em foco") {
       const numeroDeOcorrencias = texto
         .split(" ")
         .filter((palavra) =>
@@ -272,23 +275,28 @@ function checarConteudo(texto, numeroDePalavras, palavraChave) {
     }
 
     // Títulos
-    if (texto.includes(key)) {
+    else if (texto.includes("<" + key + ">")) {
       const parser = new DOMParser();
       const doc = parser.parseFromString(texto, "text/html");
       const titles = doc.querySelectorAll(key);
 
       let temPalavraChave = false;
+      console.log(temPalavraChave, "aqui");
 
       titles.forEach((el) => {
-        el.innerHTML.toLowerCase().includes(palavraChave.toLowerCase())
-          ? (temPalavraChave = true)
-          : null;
+        if (el.innerHTML.toLowerCase().includes(palavraChave.toLowerCase())) {
+          temPalavraChave = true;
+        }
       });
 
-      console.log(temPalavraChave);
       if (temPalavraChave) {
         pontos += valoresDePontuacao[key];
-        checks.push(key);
+        if (key === "h1" && titles.length > 1) {
+          numeroDeTitulos = titles.length;
+        } else {
+          checks.push(key);
+        }
+
         return;
       }
     }
