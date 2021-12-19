@@ -96,6 +96,8 @@ function atualizarChecks(checks) {
 
   elementos.forEach((el) => {
     el.classList.remove("green");
+    el.classList.remove("red");
+
     if (el.classList.contains("h5") || el.classList.contains("h6")) {
       el.classList.add("orange");
     } else if (el.classList.contains("h1") && numeroDeTitulos > 1) {
